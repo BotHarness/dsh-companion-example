@@ -69,11 +69,12 @@ export function apply(ctx) {
 - `@Remote` 装饰器没有构建步骤就写不进原型；`index.js` 直接写入同一份 SRC 描述符（上游 `packages/typert/protocol/src/index.ts` 的 `REMOTE_METHOD_DESCRIPTOR`）。上游提供公开 marker API 后可替换。
 - 徽章每 2 秒轮询一次 `getState`（骨架的简单做法）；产品化时可换成流式 Remote 或由现有 session 事件驱动。
 - bundle 的安装 / 移除需要重启 Host 生效。
+- 宿主提供 `desktopWindows` 服务时（DSH 桌面 fork 基线）插件会额外打开独立窗口；标准 dsh 下只有主窗口右下角的 Slot 徽章。
 
 ## 下一步
 
 - 用同一结构做 Live2D 产品版本（把徽章换成 Live2D canvas，`ctx.companion` 换成产品服务）。
-- 独立窗口形态跟进 [讨论 #8044](https://github.com/deepseek-ai/deepseek-harness/discussions/8044) 的 window contribution seam。
+- 独立窗口形态已实现：seam 在 fork 分支 [`BotHarness/deepseek-harness#feat/desktop-window-contribution`](https://github.com/BotHarness/deepseek-harness/tree/feat/desktop-window-contribution)；上游暂不接受外部 PR（见 [讨论 #8044](https://github.com/deepseek-ai/deepseek-harness/discussions/8044)），提交稿见 [`docs/window-seam-pr-draft.md`](./docs/window-seam-pr-draft.md)。
 
 ## License
 

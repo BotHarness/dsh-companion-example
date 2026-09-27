@@ -47,6 +47,33 @@ export class CompanionService extends TypertRemoteService {
     }, { global: true })
     ctx.on('agent/error', () => applyMood(this, 'error'), { global: true })
     ctx.effect(() => () => clearTimeout(this.decay), 'dsh-companion-example: mood decay')
+
+    // When the shell provides the desktop window seam, the companion moves to a
+    // real window; without it (plain web profile) the badge stays in the corner.
+    ctx.inject(['desktopWindows'], (windowCtx) => {
+      windowCtx.effect(() => {
+        let windowId
+        let disposed = false
+        windowCtx.desktopWindows.open({
+          id: 'companion-window',
+          surface: 'dsh-companion-example',
+          width: 260,
+          height: 200,
+          anchor: 'bottom-right',
+          margin: [24, 24],
+          alwaysOnTop: true,
+          transparent: true,
+          skipTaskbar: true,
+        }).then((id) => {
+          if (disposed) void windowCtx.desktopWindows.close(id).catch(() => {})
+          else windowId = id
+        }, (error) => { console.error('dsh-companion-example: desktop window failed to open', error) })
+        return () => {
+          disposed = true
+          if (windowId !== undefined) void windowCtx.desktopWindows.close(windowId).catch(() => {})
+        }
+      }, 'dsh-companion-example: desktop window')
+    })
   }
 
   /** Current mood. Called by other plugins and by `companion/getState`. */
