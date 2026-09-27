@@ -1,0 +1,8 @@
+# dsh-companion-example bundle layer.
+#
+# One row is enough: the row names this package as the Host plugin, and the
+# client-modules node half scans the same package's `dsh.client` declaration to
+# serve ./client.js to the browser roster.
+- insert:
+    - id: dsh-companion-example
+      name: dsh-companion-example
